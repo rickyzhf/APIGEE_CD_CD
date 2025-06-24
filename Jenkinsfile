@@ -26,7 +26,7 @@ apigeelint -s /Users/sjana2/Documents/POC/Proxy/apiproxy/ -f table.js'''
         sh '''#!/bin/bash
 export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
 pwd
-cd $WORKSPACE
+// cd $WORKSPACE
 zip -r CI_CD_PROXY apiproxy/'''
       }
     }
