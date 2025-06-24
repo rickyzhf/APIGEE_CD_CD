@@ -25,6 +25,7 @@ apigeelint -s /Users/sjana2/Documents/POC/Proxy/apiproxy/ -f table.js'''
        //slackSend (color: '#FFFF00', message: "STARTED Build to create API PROXY Bundle: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
 export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
+pwd
 cd $WORKSPACE
 zip -r CI_CD_PROXY apiproxy/'''
       }
@@ -38,7 +39,7 @@ zip -r CI_CD_PROXY apiproxy/'''
         sh '''#!/bin/bash
 export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
 //cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
-cd $WORKSPACE
+// cd $WORKSPACE
 chmod 777 deploy.sh
 ./deploy.sh'''
       }
