@@ -37,7 +37,8 @@ zip -r CI_CD_PROXY apiproxy/'''
       // slackSend (color: '#FFFF00', message: "STARTED Deploying API PROXY Bundle to TEST environment: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
 export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
-cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
+//cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
+cd $WORKSPACE
 chmod 777 deploy.sh
 ./deploy.sh'''
       }
