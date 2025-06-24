@@ -4,7 +4,7 @@ pipeline {
     stage('Install Zip (if needed)') {
       steps {
         sh '''
-          which zip || (echo "Installing zip..." && apt-get update && apt-get install -y zip)
+          which zip || (echo "Installing zip..." && apt-get update && apt-get install -y zip newman)
         '''
        }
     }
@@ -26,7 +26,8 @@ apigeelint -s /Users/sjana2/Documents/POC/Proxy/apiproxy/ -f table.js'''
         sh '''#!/bin/bash
 export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
 pwd
-// cd $WORKSPACE
+cd $WORKSPACE
+pwd
 zip -r CI_CD_PROXY apiproxy/'''
       }
     }
@@ -39,7 +40,8 @@ zip -r CI_CD_PROXY apiproxy/'''
         sh '''#!/bin/bash
 export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
 //cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
-// cd $WORKSPACE
+//cd $WORKSPACE
+pwd
 chmod 777 deploy.sh
 ./deploy.sh'''
       }
