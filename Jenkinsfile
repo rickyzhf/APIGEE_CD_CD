@@ -123,7 +123,11 @@ pipeline {
   }
   post {
     always {
-      junit '**/results.xml'
+        sh '''#!/bin/bash
+        pwd
+        ls -ltr
+        '''
+      junit 'test/results.xml'
     }
   }
   /* post {
