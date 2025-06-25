@@ -104,8 +104,8 @@ pipeline {
         export PATH="$PWD/google-cloud-sdk/bin:$PATH"
         cd test
         /root/.nvm/versions/node/v18.19.0/bin/newman run CI_CD.postman_collection.json junit --reporter-junit-export results.xml
-        junit 'results.xml'
         '''
+        junit 'results.xml'
       }
     }
     stage('Clean File') {
@@ -127,7 +127,6 @@ pipeline {
         pwd
         ls -ltr test/
         cd test
-        which junit
         '''
       // junit '/var/jenkins_home/workspace/test3/test/results.xml'
     }
