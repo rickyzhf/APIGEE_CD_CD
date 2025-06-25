@@ -1,58 +1,71 @@
 pipeline {
   agent any
-
-  environment {
-    AUTH_CODE = credentials('APIGEE_AUTH_BASIC') // Jenkins凭据ID
-    ORG_NAME = 'your-apigee-org'                 // 替换为你的Apigee组织名
-  }
-
   stages {
-    stage('Install Zip and Newman (if needed)') {
+    stage('Install Zip (if needed)') {
       steps {
         sh '''
-          which zip || (echo "Installing zip..." && apt-get update && apt-get install -y zip)
-          which newman || (echo "Installing newman..." && npm install -g newman)
+          which zip || (echo "Installing zip..." && apt-get update && apt-get install -y zip newman)
         '''
-      }
+       }
     }
-
-    stage('Build APIProxy Bundle') {
+    /*stage('Static Analysis') {
+    
       steps {
-        sh '''
-          echo "Zipping apiproxy folder..."
-          cd "$WORKSPACE"
-          zip -r CI_CD_PROXY apiproxy/
-        '''
+          // send build started notifications
+       //slackSend (color: '#FFFF00', message: "STARTED Static Analysis: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        sh '''#!/bin/bash
+export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
+apigeelint -s /Users/sjana2/Documents/POC/Proxy/apiproxy/ -f table.js'''
+      }
+    }*/
+    stage('Build APIProxy Bundle') {
+    
+      steps {
+          // send build started notifications
+       //slackSend (color: '#FFFF00', message: "STARTED Build to create API PROXY Bundle: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        sh '''#!/bin/bash
+export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
+pwd
+cd $WORKSPACE
+pwd
+zip -r CI_CD_PROXY apiproxy/'''
       }
     }
 
     stage('Deploy APIProxy Bundle') {
+    
       steps {
-        sh '''
-          echo "Deploying CI_CD_PROXY.zip to Apigee..."
-          chmod +x ./deploy.sh
-          ./deploy.sh
-        '''
+          // send build started notifications
+      // slackSend (color: '#FFFF00', message: "STARTED Deploying API PROXY Bundle to TEST environment: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        sh '''#!/bin/bash
+export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
+//cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
+//cd $WORKSPACE
+pwd
+chmod 777 deploy.sh
+./deploy.sh'''
       }
     }
 
     stage('Perform Integration Tests') {
+    
       steps {
-        sh '''
-          echo "Running Postman Integration Tests..."
-          cd test
-          newman run CI_CD.postman_collection.json
-        '''
+          // send build started notifications
+    //   slackSend (color: '#FFFF00', message: "Performing Integration tests: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        sh '''#!/bin/bash
+export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
+cd test
+newman run CI_CD.postman_collection.json'''
       }
     }
   }
-
-  post {
+  /* post {
     success {
-      echo '✅ Build and deployment succeeded!'
+      slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     }
+
     failure {
-      echo '❌ Build or deployment failed.'
+      slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     }
-  }
+  } */
 }
