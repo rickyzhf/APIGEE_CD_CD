@@ -1,32 +1,41 @@
+// convert-json-to-junit.js
 const fs = require('fs');
+const path = require('path');
 
-const lintResults = JSON.parse(fs.readFileSync('lint-results.json', 'utf-8'));
+const [,, inputFile, outputFile] = process.argv;
 
-function escapeXml(unsafe) {
-  return unsafe.replace(/[<>&'"]/g, function (c) {
-    switch (c) {
-      case '<': return '&lt;';
-      case '>': return '&gt;';
-      case '&': return '&amp;';
-      case '\'': return '&apos;';
-      case '"': return '&quot;';
-    }
-  });
+if (!inputFile || !outputFile) {
+  console.error('Usage: node convert-json-to-junit.js input.json output.xml');
+  process.exit(1);
 }
 
-let testcases = '';
-lintResults.forEach(issue => {
-  testcases += `<testcase classname="${escapeXml(issue.policyName || 'policy')}" name="${escapeXml(issue.message)}">`;
-  if (issue.severity && issue.severity.toLowerCase() === 'error') {
-    testcases += `<failure message="${escapeXml(issue.message)}"/>`;
-  }
-  testcases += `</testcase>\n`;
+const report = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
+
+function escapeXml(unsafe) {
+  return unsafe.replace(/[<>&'"]/g, c => ({
+    '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;'
+  }[c]));
+}
+
+let testCases = '';
+
+report.forEach(item => {
+  const ruleId = item.ruleId || 'unknown-rule';
+  const message = item.message || 'No message';
+  const filePath = item.filePath || 'Unknown file';
+
+  testCases += `
+    <testcase classname="${escapeXml(filePath)}" name="${escapeXml(ruleId)}">
+      <failure message="${escapeXml(message)}"/>
+    </testcase>`;
 });
 
 const junitXml = `<?xml version="1.0" encoding="UTF-8"?>
-<testsuite tests="${lintResults.length}" failures="${lintResults.filter(i => i.severity && i.severity.toLowerCase() === 'error').length}">
-${testcases}
-</testsuite>`;
+<testsuites>
+  <testsuite name="ApigeeLint Report" tests="${report.length}" failures="${report.length}">
+    ${testCases}
+  </testsuite>
+</testsuites>`;
 
-fs.writeFileSync('results.xml', junitXml);
-console.log('JUnit XML report generated as lintresults.xml');
+fs.writeFileSync(outputFile, junitXml);
+console.log(`✅ Converted ${report.length} lint issues to JUnit XML at ${outputFile}`);
