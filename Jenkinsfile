@@ -31,7 +31,7 @@ pipeline {
         sh '''
           export PATH="$PWD/google-cloud-sdk/bin:$PATH"
           echo "$AUTH_CODE"
-          echo "11111111111111"
+          echo "Using secret file at $SA_KEY"
           echo "$AUTH_CODE" > sa-key.json
           ls -lsr
           gcloud auth activate-service-account --key-file=$SA_KEY
