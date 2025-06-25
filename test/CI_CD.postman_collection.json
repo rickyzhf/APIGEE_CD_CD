@@ -50,8 +50,8 @@
 					"protocol": "https",
 					"host": [
 						"34.117.50.18",
-						".nip",
-						".io"
+						"nip",
+						"io"
 					],
 					"path": [
 						"variables",
@@ -95,8 +95,8 @@
 					"protocol": "https",
 					"host": [
 						"34.117.50.18.nip.io",
-						".nip",
-						".io"
+						"nip",
+						"io"
 					],
 					"path": [
 						"variables",
