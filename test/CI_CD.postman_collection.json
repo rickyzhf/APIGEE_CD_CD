@@ -49,9 +49,9 @@
 					"raw": "https://34.117.50.18.nip.io/variables/xml",
 					"protocol": "https",
 					"host": [
-						"34.117.50.18.nip.io",
-						"apigee",
-						"net"
+						"34.117.50.18",
+						".nip",
+						".io"
 					],
 					"path": [
 						"variables",
@@ -95,8 +95,8 @@
 					"protocol": "https",
 					"host": [
 						"34.117.50.18.nip.io",
-						"apigee",
-						"net"
+						".nip",
+						".io"
 					],
 					"path": [
 						"variables",
