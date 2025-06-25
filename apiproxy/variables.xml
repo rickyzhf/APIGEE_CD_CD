@@ -2,10 +2,10 @@
 <APIProxy revision="1" name="variables">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
     <CreatedAt>1462938270155</CreatedAt>
-    <CreatedBy>wwitman@apigee.com</CreatedBy>
+    <CreatedBy>test@apigee.com</CreatedBy>
     <DisplayName>variables</DisplayName>
     <LastModifiedAt>1462938323904</LastModifiedAt>
-    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
+    <LastModifiedBy>test@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>parse-json-response</Policy>
         <Policy>parse-xml-response</Policy>

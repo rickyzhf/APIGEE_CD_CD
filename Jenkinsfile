@@ -25,7 +25,16 @@ pipeline {
         '''
       }
     }
+    stage('Install Node.js and apigeelint') {
+        steps {
 
+            sh '''
+                // curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+                // apt-get install -y nodejs
+                npm install -g apigeelint
+            '''
+        }
+    }
     stage('Authenticate to GCP') {
       steps {
         withCredentials([file(credentialsId: 'GOOGLE_APPLICATION_CREDENTIALS', variable: 'SA_KEY')]) {
@@ -43,16 +52,17 @@ pipeline {
         }
       }
     }
-    /*stage('Static Analysis') {
+    stage('Static Analysis') {
     
       steps {
           // send build started notifications
        //slackSend (color: '#FFFF00', message: "STARTED Static Analysis: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
-export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
-apigeelint -s /Users/sjana2/Documents/POC/Proxy/apiproxy/ -f table.js'''
+        export PATH=/root/.nvm/versions/node/v18.19.0/bin/:$PATH
+        apigeelint -s /Users/sjana2/Documents/POC/Proxy/apiproxy/ -f table.js
+        '''
       }
-    }*/
+    }
     stage('Build APIProxy Bundle') {
     
       steps {
