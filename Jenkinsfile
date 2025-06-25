@@ -126,9 +126,8 @@ pipeline {
         sh '''#!/bin/bash
         pwd
         ls -ltr test/
-        cd test
         '''
-      // junit 'test/results.xml'
+      junit 'test/results.xml'
     }
   }
   /* post {
