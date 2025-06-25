@@ -8,7 +8,7 @@ pipeline {
     stage('Install Zip (if needed)') {
       steps {
         sh '''
-          which zip || (echo "Installing zip..." && apt-get update && apt-get install -y zip newman)
+          which zip || (echo "Installing zip..." && apt-get update && apt-get install -y zip newman curl)
         '''
        }
     }
@@ -57,9 +57,9 @@ chmod 777 deploy.sh
           // send build started notifications
     //   slackSend (color: '#FFFF00', message: "Performing Integration tests: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
-export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
+// export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
 cd test
-newman run CI_CD.postman_collection.json'''
+/root/.nvm/versions/node/v18.19.0/bin/newman run CI_CD.postman_collection.json'''
       }
     }
   }
