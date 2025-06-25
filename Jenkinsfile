@@ -1,8 +1,8 @@
 pipeline {
   agent any
   environment {
-    AUTH_CODE = credentials('APIGEE_AUTH_BASIC') // Jenkins凭据ID
-    ORG_NAME = 'your-apigee-org'                 // 替换为你的Apigee组织名
+    AUTH_CODE = credentials('APIGEE_AUTH_BASIC') 
+    ORG_NAME = 'your-apigee-org'                 
   }
   stages {
     stage('Install Zip (if needed)') {

@@ -1,0 +1,92 @@
+pipeline {
+    agent any
+
+    environment {
+        ORG_NAME = 'molten-album-461308-b8'
+        ENV_NAME = 'dev1'
+        PROXY_NAME = 'my-api-proxy'
+        GCP_SA_CREDENTIALS_ID = 'testapigee'
+        ZIP_FILE = 'my-api-proxy.zip'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Authenticate') {
+            steps {
+                withCredentials([file(credentialsId: "${GCP_SA_CREDENTIALS_ID}", variable: 'SERVICE_ACCOUNT_KEY')]) {
+                    sh '''
+                    # 激活服务账号
+                    gcloud auth activate-service-account --key-file=$SERVICE_ACCOUNT_KEY
+
+                    # 获取访问 token
+                    ACCESS_TOKEN=$(gcloud auth print-access-token)
+                    echo "ACCESS_TOKEN=$ACCESS_TOKEN" > token.env
+                    '''
+                }
+            }
+        }
+
+        stage('Import API Proxy') {
+            steps {
+                script {
+                    def token = readFile('token.env').trim().split('=')[1]
+                    def importCmd = """
+                    curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST \\
+                    -H "Authorization: Bearer ${token}" \\
+                    -F "file=@${env.ZIP_FILE}" \\
+                    "https://apigee.googleapis.com/v1/organizations/${env.ORG_NAME}/apis?action=import&name=${env.PROXY_NAME}"
+                    """
+
+                    def response = sh(script: importCmd, returnStdout: true).trim()
+
+                    // 解析 HTTP 状态码和 body
+                    def httpStatus = response.replaceAll(/.*HTTPSTATUS:(\\d+)$/, '$1')
+                    def responseBody = response.replaceAll(/HTTPSTATUS:\\d+$/, '')
+
+                    if (httpStatus != '200') {
+                        error "Import API proxy failed with status ${httpStatus}: ${responseBody}"
+                    }
+
+                    // 提取 revision
+                    def matcher = responseBody =~ /"revision"\s*:\s*(\\d+)/
+                    if (!matcher) {
+                        error "Revision not found in response: ${responseBody}"
+                    }
+                    env.REVISION = matcher[0][1]
+                    echo "Imported revision: ${env.REVISION}"
+                }
+            }
+        }
+
+        stage('Deploy API Proxy') {
+            steps {
+                script {
+                    def token = readFile('token.env').trim().split('=')[1]
+                    def deployCmd = """
+                    curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST \\
+                    -H "Authorization: Bearer ${token}" \\
+                    -H "Content-Type: application/json" \\
+                    -d '{}' \\
+                    "https://apigee.googleapis.com/v1/organizations/${env.ORG_NAME}/environments/${env.ENV_NAME}/apis/${env.PROXY_NAME}/revisions/${env.REVISION}/deployments"
+                    """
+
+                    def response = sh(script: deployCmd, returnStdout: true).trim()
+
+                    def httpStatus = response.replaceAll(/.*HTTPSTATUS:(\\d+)$/, '$1')
+                    def responseBody = response.replaceAll(/HTTPSTATUS:\\d+$/, '')
+
+                    if (httpStatus != '200') {
+                        error "Deploy API proxy failed with status ${httpStatus}: ${responseBody}"
+                    }
+
+                    echo "Successfully deployed revision ${env.REVISION} to environment ${env.ENV_NAME}"
+                }
+            }
+        }
+    }
+}
