@@ -128,7 +128,7 @@ pipeline {
         ls -ltr test/
         cd test
         '''
-      junit 'results.xml'
+      junit '/var/jenkins_home/workspace/test3/test/results.xml'
     }
   }
   /* post {
