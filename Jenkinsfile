@@ -37,6 +37,8 @@ pipeline {
             ls -lsr
             gcloud auth activate-service-account --key-file=$SA_KEY
             gcloud config set project $PROJECT_ID
+            ACCESS_TOKEN=$(gcloud auth print-access-token)
+            echo $ACCESS_TOKEN > access.token
           '''
         }
       }
@@ -57,11 +59,12 @@ apigeelint -s /Users/sjana2/Documents/POC/Proxy/apiproxy/ -f table.js'''
           // send build started notifications
        //slackSend (color: '#FFFF00', message: "STARTED Build to create API PROXY Bundle: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
-export PATH="$PWD/google-cloud-sdk/bin:$PATH"
-pwd
-cd $WORKSPACE
-pwd
-zip -r CI_CD_PROXY apiproxy/'''
+        export PATH="$PWD/google-cloud-sdk/bin:$PATH"
+        pwd
+        cd $WORKSPACE
+        pwd
+        zip -r CI_CD_PROXY apiproxy/
+        '''
       }
     }
 
@@ -71,12 +74,13 @@ zip -r CI_CD_PROXY apiproxy/'''
           // send build started notifications
       // slackSend (color: '#FFFF00', message: "STARTED Deploying API PROXY Bundle to TEST environment: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
-export PATH="$PWD/google-cloud-sdk/bin:$PATH"
-//cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
-//cd $WORKSPACE
-pwd
-chmod 777 upload-deploy.sh
-./upload-deploy.sh'''
+        export PATH="$PWD/google-cloud-sdk/bin:$PATH"
+        //cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
+        //cd $WORKSPACE
+        pwd
+        chmod 777 upload-deploy.sh
+        ./upload-deploy.sh
+        '''
       }
     }
 
@@ -86,9 +90,10 @@ chmod 777 upload-deploy.sh
           // send build started notifications
     //   slackSend (color: '#FFFF00', message: "Performing Integration tests: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
-export PATH="$PWD/google-cloud-sdk/bin:$PATH"
-cd test
-/root/.nvm/versions/node/v18.19.0/bin/newman run CI_CD.postman_collection.json'''
+        export PATH="$PWD/google-cloud-sdk/bin:$PATH"
+        cd test
+        /root/.nvm/versions/node/v18.19.0/bin/newman run CI_CD.postman_collection.json
+        '''
       }
     }
   }
