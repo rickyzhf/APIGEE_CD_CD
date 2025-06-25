@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    AUTH_CODE = credentials('GOOGLE_APPLICATION_CREDENTIALS') 
+    AUTH_CODE = credentials('APIGEE_AUTH_BASIC') 
     GCLOUD_PROJECT = 'molten-album-461308-b8'
     ORG_NAME = 'molten-album-461308-b8'                 
   }
@@ -26,6 +26,7 @@ pipeline {
     }
 
     stage('Authenticate to GCP') {
+      withCredentials([file(credentialsId: 'GOOGLE_APPLICATION_CREDENTIALS', variable: 'SA_KEY')]) {
       steps {
         sh '''
           export PATH="$PWD/google-cloud-sdk/bin:$PATH"
@@ -33,9 +34,10 @@ pipeline {
           echo "11111111111111"
           echo "$AUTH_CODE" > sa-key.json
           ls -lsr
-          gcloud auth activate-service-account --key-file=./sa-key.json
+          gcloud auth activate-service-account --key-file=$SA_KEY
           gcloud config set project $PROJECT_ID
         '''
+      }
       }
     }
     /*stage('Static Analysis') {
