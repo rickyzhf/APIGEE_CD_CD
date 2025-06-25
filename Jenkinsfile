@@ -125,9 +125,9 @@ pipeline {
     always {
         sh '''#!/bin/bash
         pwd
-        ls -ltr
+        ls -ltr test/
         '''
-      junit 'test/results.xml'
+      junit './test/results.xml'
     }
   }
   /* post {
