@@ -58,7 +58,8 @@ pipeline {
        //slackSend (color: '#FFFF00', message: "STARTED Static Analysis: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
         export PATH=/root/.nvm/versions/node/v18.19.0/bin/:$PATH
-        apigeelint -s /var/jenkins_home/workspace/test3/apiproxy/ -f table.js
+        apigeelint -s ./apiproxy/ -f table.js
+        apigeelint -s ./apiproxy -f stylish.js
         '''
       }
     }
