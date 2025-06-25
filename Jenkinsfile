@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    AUTH_CODE = credentials('APIGEE_AUTH_BASIC') 
+    AUTH_CODE = credentials('GOOGLE_APPLICATION_CREDENTIALS') 
     GCLOUD_PROJECT = 'molten-album-461308-b8'
     ORG_NAME = 'molten-album-461308-b8'                 
   }
