@@ -1,0 +1,7 @@
+{
+  "source": { "include": ["apiproxy/"] },
+  "profiles": ["apigeex"],
+  "rules": {
+    "BN014": "off"
+  }
+}
