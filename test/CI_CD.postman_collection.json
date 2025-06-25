@@ -15,7 +15,7 @@
 						"exec": [
 							"pm.test(\"Check lastName\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.root.lastName).to.eql(\"John\");",
+							"    pm.expect(jsonData.root.lastName).to.eql(\"Doe\");",
 							"});",
 							"",
 							"pm.test(\"Check city\", function () {",
@@ -71,7 +71,7 @@
 						"exec": [
 							"pm.test(\"Check firstName\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.firstName).to.eql(\"Doe\");",
+							"    pm.expect(jsonData.firstName).to.eql(\"John\");",
 							"});",
 							"",
 							"pm.test(\"Check state\", function () {",
