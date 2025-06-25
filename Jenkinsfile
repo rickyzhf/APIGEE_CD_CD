@@ -42,7 +42,7 @@ pipeline {
         // apigeelint -s ./apiproxy -f stylish.js
         // apigeelint -s ./apiproxy/ -f table.js
         sh '''#!/bin/bash
-        export PATH=/root/.nvm/versions/node/v18.19.0/bin/:$PATH
+        export PATH=/root/.nvm/versions/node/v20.19.3/bin/:$PATH
         apigeelint -s ./apiproxy/ -f json > lint-results.json
         node convert-json-to-junit.js lint-report.json lint-report.xml
         
@@ -88,7 +88,6 @@ pipeline {
         // slackSend (color: '#FFFF00', message: "STARTED Deploying API PROXY Bundle to TEST environment: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
         export PATH="$PWD/google-cloud-sdk/bin:$PATH"
-        //cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
         //cd $WORKSPACE
         pwd
         chmod 777 upload-deploy.sh
