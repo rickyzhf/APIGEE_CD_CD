@@ -26,18 +26,18 @@ pipeline {
     }
 
     stage('Authenticate to GCP') {
-      withCredentials([file(credentialsId: 'GOOGLE_APPLICATION_CREDENTIALS', variable: 'SA_KEY')]) {
       steps {
-        sh '''
-          export PATH="$PWD/google-cloud-sdk/bin:$PATH"
-          echo "$AUTH_CODE"
-          echo "Using secret file at $SA_KEY"
-          echo "$AUTH_CODE" > sa-key.json
-          ls -lsr
-          gcloud auth activate-service-account --key-file=$SA_KEY
-          gcloud config set project $PROJECT_ID
-        '''
-      }
+        withCredentials([file(credentialsId: 'GOOGLE_APPLICATION_CREDENTIALS', variable: 'SA_KEY')]) {
+          sh '''
+            export PATH="$PWD/google-cloud-sdk/bin:$PATH"
+            echo "$AUTH_CODE"
+            echo "Using secret file at $SA_KEY"
+            echo "$AUTH_CODE" > sa-key.json
+            ls -lsr
+            gcloud auth activate-service-account --key-file=$SA_KEY
+            gcloud config set project $PROJECT_ID
+          '''
+        }
       }
     }
     /*stage('Static Analysis') {
