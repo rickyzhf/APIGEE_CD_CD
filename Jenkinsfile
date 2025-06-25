@@ -34,6 +34,19 @@ pipeline {
             '''
         }
     }
+    stage('Static Analysis Node20+') {
+    
+      steps {
+        // send build started notifications
+        //slackSend (color: '#FFFF00', message: "STARTED Static Analysis: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        // apigeelint -s ./apiproxy -f stylish.js
+        sh '''#!/bin/bash
+        export PATH=/root/.nvm/versions/node/v18.19.0/bin/:$PATH
+        apigeelint -s ./apiproxy/ -f table.js
+        
+        '''
+      }
+    }
     stage('Authenticate to GCP') {
       steps {
         withCredentials([file(credentialsId: 'GOOGLE_APPLICATION_CREDENTIALS', variable: 'SA_KEY')]) {
@@ -49,18 +62,6 @@ pipeline {
             echo $ACCESS_TOKEN > access.token
           '''
         }
-      }
-    }
-    stage('Static Analysis') {
-    
-      steps {
-          // send build started notifications
-       //slackSend (color: '#FFFF00', message: "STARTED Static Analysis: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-        sh '''#!/bin/bash
-        export PATH=/root/.nvm/versions/node/v18.19.0/bin/:$PATH
-        apigeelint -s ./apiproxy/ -f table.js
-        apigeelint -s ./apiproxy -f stylish.js
-        '''
       }
     }
     stage('Build APIProxy Bundle') {
@@ -81,8 +82,8 @@ pipeline {
     stage('Deploy APIProxy Bundle') {
     
       steps {
-          // send build started notifications
-      // slackSend (color: '#FFFF00', message: "STARTED Deploying API PROXY Bundle to TEST environment: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      // send build started notifications
+        // slackSend (color: '#FFFF00', message: "STARTED Deploying API PROXY Bundle to TEST environment: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
         export PATH="$PWD/google-cloud-sdk/bin:$PATH"
         //cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
@@ -98,11 +99,23 @@ pipeline {
     
       steps {
           // send build started notifications
-    //   slackSend (color: '#FFFF00', message: "Performing Integration tests: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        //   slackSend (color: '#FFFF00', message: "Performing Integration tests: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
         export PATH="$PWD/google-cloud-sdk/bin:$PATH"
         cd test
         /root/.nvm/versions/node/v18.19.0/bin/newman run CI_CD.postman_collection.json
+        '''
+      }
+    }
+    stage('The End') {
+    
+      steps {
+          // send build started notifications
+        //   slackSend (color: '#FFFF00', message: "Performing Integration tests: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        sh '''#!/bin/bash
+        pwd
+        ls -ltr
+        rm sa-key.json
         '''
       }
     }
