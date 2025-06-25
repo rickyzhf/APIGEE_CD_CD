@@ -71,12 +71,12 @@
 						"exec": [
 							"pm.test(\"Check firstName\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.firstName).to.eql(\"John\");",
+							"    pm.expect(jsonData.firstName).to.eql(\"Doe\");",
 							"});",
 							"",
 							"pm.test(\"Check state\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.state).to.eql(\"VA\");",
+							"    pm.expect(jsonData.state).to.eql(\"CA\");",
 							"});"
 						],
 						"type": "text/javascript"
