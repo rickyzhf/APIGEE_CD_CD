@@ -94,7 +94,7 @@
 					"raw": "https://34.117.50.18.nip.io/variables/json",
 					"protocol": "https",
 					"host": [
-						"34.117.50.18.nip.io",
+						"34.117.50.18",
 						"nip",
 						"io"
 					],
