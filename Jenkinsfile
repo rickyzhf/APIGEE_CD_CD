@@ -16,8 +16,8 @@ pipeline {
     stage('Install gcloud SDK') {
       steps {
         sh '''
-          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${GCLOUD_SDK_VERSION}-linux-x86_64.tar.gz
-          tar -xzf google-cloud-cli-${GCLOUD_SDK_VERSION}-linux-x86_64.tar.gz
+          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-497.0.0-linux-x86_64.tar.gz
+          tar -xf google-cloud-cli-497.0.0-linux-x86_64.tar.gz
           ./google-cloud-sdk/install.sh --quiet
           export PATH="$PWD/google-cloud-sdk/bin:$PATH"
           gcloud version
