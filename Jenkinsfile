@@ -107,7 +107,7 @@ pipeline {
         '''
       }
     }
-    stage('The End') {
+    stage('Clean File') {
     
       steps {
           // send build started notifications
