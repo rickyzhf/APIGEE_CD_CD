@@ -8,7 +8,7 @@ ENV_NAME="dev1"
 # ACCESS_TOKEN=$AUTH_CODE 
 # echo ${ACCESS_TOKEN}
 ACCESS_TOKEN=$(gcloud auth print-access-token)
-
+echo ${ACCESS_TOKEN}
 # 1. Import API Proxy zip 包（上传并创建revision）
 echo "Importing API proxy..."
 IMPORT_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" \
