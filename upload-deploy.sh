@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 变量，改成你的值
-PROXY_NAME="test2"
+PROXY_NAME="jenkinscicd2"
 ZIP_FILE="./my-api-proxy.zip"
 ORG_NAME="molten-album-461308-b8"
 ENV_NAME="dev1"       
