@@ -123,7 +123,7 @@ pipeline {
   }
   post {
     always {
-      junit 'results.xml'
+      junit '../test/results.xml'
     }
   }
   /* post {
