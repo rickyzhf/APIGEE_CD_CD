@@ -47,6 +47,7 @@ pipeline {
         node convert-to-junit.js lint-results.json lint-report.xml
         
         '''
+        junit 'lint-report.xml'
       }
     }
     stage('Authenticate to GCP') {
@@ -128,7 +129,6 @@ pipeline {
         pwd
         ls -ltr test/
         '''
-      junit 'lint-report.xml'
       junit 'test/results.xml'
     }
   }
