@@ -34,7 +34,8 @@ pipeline {
             gcloud config set project $GCLOUD_PROJECT
           '''
         }
-      }
+       }
+    }
     /*stage('Static Analysis') {
     
       steps {
