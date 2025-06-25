@@ -40,9 +40,11 @@ pipeline {
         // send build started notifications
         //slackSend (color: '#FFFF00', message: "STARTED Static Analysis: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         // apigeelint -s ./apiproxy -f stylish.js
+        // apigeelint -s ./apiproxy/ -f table.js
         sh '''#!/bin/bash
         export PATH=/root/.nvm/versions/node/v18.19.0/bin/:$PATH
-        apigeelint -s ./apiproxy/ -f table.js
+        apigeelint -s ./apiproxy/ -f json > lint-results.json
+        node convert-json-to-junit.js lint-report.json lint-report.xml
         
         '''
       }
@@ -127,6 +129,7 @@ pipeline {
         pwd
         ls -ltr test/
         '''
+      junit 'lint-report.xml'
       junit 'test/results.xml'
     }
   }
