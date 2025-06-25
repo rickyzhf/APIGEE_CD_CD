@@ -105,7 +105,7 @@ pipeline {
         cd test
         /root/.nvm/versions/node/v18.19.0/bin/newman run CI_CD.postman_collection.json junit --reporter-junit-export results.xml
         '''
-        junit 'results.xml'
+        junit 'test/results.xml'
       }
     }
     stage('Clean File') {
@@ -128,7 +128,7 @@ pipeline {
         ls -ltr test/
         cd test
         '''
-      // junit '/var/jenkins_home/workspace/test3/test/results.xml'
+      // junit 'test/results.xml'
     }
   }
   /* post {
