@@ -46,10 +46,10 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://<Proxy_name>/variables/xml",
+					"raw": "http://34.117.50.18.nip.io/variables/xml",
 					"protocol": "http",
 					"host": [
-						"janapatisiva-eval-test",
+						"34.117.50.18.nip.io",
 						"apigee",
 						"net"
 					],
@@ -91,10 +91,10 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://<Proxy_name>/variables/json",
+					"raw": "http://34.117.50.18.nip.io/variables/json",
 					"protocol": "http",
 					"host": [
-						"janapatisiva-eval-test",
+						"34.117.50.18.nip.io",
 						"apigee",
 						"net"
 					],

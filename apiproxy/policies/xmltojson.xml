@@ -1,4 +1,5 @@
 <XMLToJSON name="xmltojson">
-	<Options>
-	</Options>
+    <Options>
+        <AttributePrefix>@</AttributePrefix>
+    </Options>
 </XMLToJSON>

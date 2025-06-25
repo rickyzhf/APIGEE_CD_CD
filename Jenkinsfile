@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     AUTH_CODE = credentials('APIGEE_AUTH_BASIC') 
-    ORG_NAME = 'your-apigee-org'                 
+    ORG_NAME = 'molten-album-461308-b8'                 
   }
   stages {
     stage('Install Zip (if needed)') {
@@ -46,8 +46,8 @@ export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
 //cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
 //cd $WORKSPACE
 pwd
-chmod 777 deploy.sh
-./deploy.sh'''
+chmod 777 upload-deploy.sh
+./upload-deploy.sh'''
       }
     }
 
