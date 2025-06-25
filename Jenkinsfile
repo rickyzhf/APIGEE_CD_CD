@@ -29,6 +29,8 @@ pipeline {
       steps {
         sh '''
           export PATH="$PWD/google-cloud-sdk/bin:$PATH"
+          echo "$AUTH_CODE"
+          echo "11111111111111"
           echo "$AUTH_CODE" > sa-key.json
           gcloud auth activate-service-account --key-file=sa-key.json
           gcloud config set project $PROJECT_ID
