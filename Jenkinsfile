@@ -34,7 +34,7 @@ pipeline {
             '''
         }
     }
-    stage('Static Analysis Node20+') {
+    stage('Static Analysis- Need Node20+') {
     
       steps {
         // send build started notifications
@@ -103,7 +103,8 @@ pipeline {
         sh '''#!/bin/bash
         export PATH="$PWD/google-cloud-sdk/bin:$PATH"
         cd test
-        /root/.nvm/versions/node/v18.19.0/bin/newman run CI_CD.postman_collection.json
+        /root/.nvm/versions/node/v18.19.0/bin/newman run CI_CD.postman_collection.json -r cli,junit --reporter-junit-export results.xml
+
         '''
       }
     }
@@ -118,6 +119,11 @@ pipeline {
         rm sa-key.json
         '''
       }
+    }
+  }
+  post {
+    always {
+      junit 'results.xml'
     }
   }
   /* post {
