@@ -44,7 +44,7 @@ pipeline {
         sh '''#!/bin/bash
         export PATH=/root/.nvm/versions/node/v20.19.3/bin/:$PATH
         apigeelint -s ./apiproxy/ -f json > lint-results.json
-        node convert-to-junit.js lint-report.json lint-report.xml
+        node convert-to-junit.js lint-results.json lint-report.xml
         
         '''
       }
