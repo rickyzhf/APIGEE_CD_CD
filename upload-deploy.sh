@@ -6,6 +6,7 @@ ZIP_FILE="./my-api-proxy.zip"
 ORG_NAME="molten-album-461308-b8"
 ENV_NAME="dev1"       
 ACCESS_TOKEN=$AUTH_CODE 
+echo ${ACCESS_TOKEN}
 # ACCESS_TOKEN=$(gcloud auth print-access-token)
 
 # 1. Import API Proxy zip 包（上传并创建revision）
