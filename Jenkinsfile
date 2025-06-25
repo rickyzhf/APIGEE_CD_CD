@@ -13,28 +13,27 @@ pipeline {
         '''
        }
     }
-    stage('Install gcloud') {
+    stage('Install gcloud SDK') {
       steps {
         sh '''
-          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-467.0.0-linux-x86_64.tar.gz
-          tar -xzf google-cloud-cli-467.0.0-linux-x86_64.tar.gz
+          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${GCLOUD_SDK_VERSION}-linux-x86_64.tar.gz
+          tar -xzf google-cloud-cli-${GCLOUD_SDK_VERSION}-linux-x86_64.tar.gz
           ./google-cloud-sdk/install.sh --quiet
-          echo 'source ./google-cloud-sdk/path.bash.inc' >> ~/.bashrc
-          source ./google-cloud-sdk/path.bash.inc
+          export PATH="$PWD/google-cloud-sdk/bin:$PATH"
           gcloud version
         '''
       }
     }
-    stage('Authenticate') {
+
+    stage('Authenticate to GCP') {
       steps {
-        withCredentials([file(credentialsId: 'gcp-sa-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-          sh '''
-            source ./google-cloud-sdk/path.bash.inc
-            gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-            gcloud config set project $GCLOUD_PROJECT
-          '''
-        }
-       }
+        sh '''
+          export PATH="$PWD/google-cloud-sdk/bin:$PATH"
+          echo "$SERVICE_ACCOUNT_KEY" > sa-key.json
+          gcloud auth activate-service-account --key-file=sa-key.json
+          gcloud config set project $PROJECT_ID
+        '''
+      }
     }
     /*stage('Static Analysis') {
     
@@ -52,7 +51,7 @@ apigeelint -s /Users/sjana2/Documents/POC/Proxy/apiproxy/ -f table.js'''
           // send build started notifications
        //slackSend (color: '#FFFF00', message: "STARTED Build to create API PROXY Bundle: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
-export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
+export PATH="$PWD/google-cloud-sdk/bin:$PATH"
 pwd
 cd $WORKSPACE
 pwd
@@ -66,7 +65,7 @@ zip -r CI_CD_PROXY apiproxy/'''
           // send build started notifications
       // slackSend (color: '#FFFF00', message: "STARTED Deploying API PROXY Bundle to TEST environment: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
-export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
+export PATH="$PWD/google-cloud-sdk/bin:$PATH"
 //cd /Users/sjana2/.jenkins/workspace/APIGEE_CI_CD_DEMO_master/
 //cd $WORKSPACE
 pwd
@@ -81,7 +80,7 @@ chmod 777 upload-deploy.sh
           // send build started notifications
     //   slackSend (color: '#FFFF00', message: "Performing Integration tests: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         sh '''#!/bin/bash
-// export PATH=/Users/sjana2/Documents/POC/node-v10.15.1/bin/:$PATH
+export PATH="$PWD/google-cloud-sdk/bin:$PATH"
 cd test
 /root/.nvm/versions/node/v18.19.0/bin/newman run CI_CD.postman_collection.json'''
       }
