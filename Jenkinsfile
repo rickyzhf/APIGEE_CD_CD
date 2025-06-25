@@ -2,6 +2,7 @@ pipeline {
   agent any
   environment {
     AUTH_CODE = credentials('APIGEE_AUTH_BASIC') 
+    GCLOUD_PROJECT = 'molten-album-461308-b8'
     ORG_NAME = 'molten-album-461308-b8'                 
   }
   stages {
@@ -12,6 +13,28 @@ pipeline {
         '''
        }
     }
+    stage('Install gcloud') {
+      steps {
+        sh '''
+          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-467.0.0-linux-x86_64.tar.gz
+          tar -xzf google-cloud-cli-467.0.0-linux-x86_64.tar.gz
+          ./google-cloud-sdk/install.sh --quiet
+          echo 'source ./google-cloud-sdk/path.bash.inc' >> ~/.bashrc
+          source ./google-cloud-sdk/path.bash.inc
+          gcloud version
+        '''
+      }
+    }
+    stage('Authenticate') {
+      steps {
+        withCredentials([file(credentialsId: 'gcp-sa-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+          sh '''
+            source ./google-cloud-sdk/path.bash.inc
+            gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+            gcloud config set project $GCLOUD_PROJECT
+          '''
+        }
+      }
     /*stage('Static Analysis') {
     
       steps {
