@@ -3,7 +3,8 @@ pipeline {
   environment {
     AUTH_CODE = credentials('APIGEE_AUTH_BASIC') 
     GCLOUD_PROJECT = 'molten-album-461308-b8'
-    ORG_NAME = 'molten-album-461308-b8'                 
+    ORG_NAME = 'molten-album-461308-b8'    
+    PROJECT_ID = 'molten-album-461308-b8'            
   }
   stages {
     stage('Install Zip (if needed)') {
