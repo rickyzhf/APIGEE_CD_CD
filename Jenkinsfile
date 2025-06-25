@@ -127,6 +127,7 @@ pipeline {
         pwd
         ls -ltr test/
         cd test
+        which junit
         '''
       junit '/var/jenkins_home/workspace/test3/test/results.xml'
     }
